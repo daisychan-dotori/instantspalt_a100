@@ -1,19 +1,18 @@
 #!/bin/bash
 
 # Change the absolute path first!
-DATA_ROOT_DIR="<Absolute_Path>/InstantSplat/assets"
+DATA_ROOT_DIR="/workspace/assets"
 OUTPUT_DIR="output_infer"
 DATASETS=(
-    sora
+    house
 )
 
 SCENES=(
-    Santorini
-    Art 
+    abc_tile1
 )
 
 N_VIEWS=(
-    3
+    50
 )
 
 gs_train_iter=1000

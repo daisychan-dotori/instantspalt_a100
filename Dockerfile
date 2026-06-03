@@ -20,9 +20,13 @@ RUN git clone --recursive https://github.com/NVlabs/InstantSplat.git &&\
     mkdir -p checkpoints/ &&\
     wget https://download.europe.naverlabs.com/ComputerVision/MASt3R/MASt3R_ViTLarge_BaseDecoder_512_catmlpdpt_metric.pth -P checkpoints/
 
-WORKDIR /InstantSplat
 
+WORKDIR /InstantSplat
+COPY requirements.txt /InstantSplat/requirements.txt
+# 先安裝 numpy 1.26.4，避免 numpy 2.x 相容性問題
 RUN pip3 install -r requirements.txt
+# 再次強制降級 numpy，避免 requirements.txt 或其他依賴升級 numpy 2.x
+RUN pip3 install numpy==1.26.4
 
 ARG TORCH_CUDA_ARCH_LIST="3.5;5.0;6.0;6.1;7.0;7.5;8.0;8.6+PTX"
 
@@ -34,6 +38,7 @@ RUN cd croco/models/curope/ &&\
     python3 setup.py build_ext --inplace
     
 RUN pip3 install plyfile
-RUN apt-get install -y libgl1-mesa-dev libglib2.0-0
+RUN apt-get install -y libgl1-mesa-dev libglib2.0-0 ffmpeg
+RUN pip3 install imageio[ffmpeg]
 
 ENV CUDA_VISIBLE_DEVICES=0
